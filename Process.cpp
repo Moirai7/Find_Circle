@@ -10,15 +10,15 @@
 void ProcData::calDeal() {
 	ifstream fin;
 	string s;
-	int item[100000] = {0}; 
+	long long item[100000] = {0}; 
 	fin.open("/Users/emma/Work/alg/item.txt",ios::in);
 	//fin.open("/Users/emma/Work/alg/sitem.txt",ios::in);
 	while (getline(fin,s)) {
-		vector<int> tokens = split(s,' ');
+		vector<long long> tokens = split(s,' ');
 		item[tokens[0]] = tokens[1];
 	}
 	if (DEBUG) {
-		for (int i=0; i<ITEMNUM; ++i) {
+		for (long long i=0; i<ITEMNUM; ++i) {
 			cout<<i<<","<<item[i]<<endl;
 		}
 	}
@@ -27,9 +27,9 @@ void ProcData::calDeal() {
 	fin.open("/Users/emma/Work/alg/deal.txt",ios::in);
 	//fin.open("/Users/emma/Work/alg/sdeal.txt",ios::in);
 	while (getline(fin,s)) {
-		vector<int> tokens = split(s,' ');
-		int count = tokens[1];
-		for (int i=1; i<=count; ++i) {
+		vector<long long> tokens = split(s,' ');
+		long long count = tokens[1];
+		for (long long i=1; i<=count; ++i) {
 			user[tokens[0]] += item[tokens[2*i]]*tokens[2*i+1];
 		}
 	}
@@ -37,7 +37,7 @@ void ProcData::calDeal() {
 	if (DEBUG) {
 		ofstream out;
 		out.open("/Users/emma/Work/alg/proc.txt",ios::out|ios::trunc);
-		for (int i=0; i<USERNUM; ++i) {
+		for (long long i=0; i<USERNUM; ++i) {
 			out<<i<<","<<user[i]<<endl;
 		}
 		out.close();
@@ -50,8 +50,8 @@ void ProcData::calFriend() {
 	fin.open("/Users/emma/Work/alg/user.txt",ios::in);
 	//fin.open("/Users/emma/Work/alg/suser.txt",ios::in);
 	while (getline(fin,s)) {
-		vector<int> tokens = split(s,' ');
-		for (int i=0; i<tokens[1]; ++i) {
+		vector<long long> tokens = split(s,' ');
+		for (long long i=0; i<tokens[1]; ++i) {
 			Friend *f = new Friend;
 			f->uid = tokens[i+2];
 			f->next = fri[tokens[0]].next;
@@ -60,7 +60,7 @@ void ProcData::calFriend() {
 	}
 	fin.close();
 	if (DEBUG) {
-                for (int i=0; i<USERNUM; ++i) {
+                for (long long i=0; i<USERNUM; ++i) {
 			Friend* f = &fri[i];
 			while (f->next != NULL) {
                         	cout<<f->uid<<",";
@@ -72,22 +72,22 @@ void ProcData::calFriend() {
 }
 
 void ProcData::calCycle() {
-	vector<pair<int,list<int>>> result;
-	for (int i=0; i<USERNUM; ++i) {
-		stack<int> cycle;
-		int money = 0;
-		list<int> l;
+	vector<pair<long long,list<long long>>> result;
+	for (long long i=0; i<USERNUM; ++i) {
+		stack<long long> cycle;
+		long long money = 0;
+		list<long long> l;
 		
 		Friend* f = &fri[i];
 		while (f!=NULL) {
-			int index = f->uid;
+			long long index = f->uid;
 			cycle.push(index);
 			l.push_back(index);
 			money += user[index];
 			f = f->next;
 		}
 		while (!cycle.empty()) {
-			int index=cycle.top();
+			long long index=cycle.top();
 			cycle.pop();
 			Friend* f = fri[index].next;
 			while (f != NULL) {
@@ -110,14 +110,14 @@ void ProcData::calCycle() {
 	ofstream out;
 	out.open("/Users/emma/Work/alg/rank.txt",ios::out|ios::trunc);
 	out<<"Rank"<<endl;
-	int i = 0;
-	list<int> last;
+	long long i = 0;
+	list<long long> last;
 	if (DEBUG) {
 		for (auto it=result.rbegin(); it!=result.rend(); ++it) {
-			list<int> l = it->second;
+			list<long long> l = it->second;
 			if (last == l)
 				continue;
-			int money = it->first;
+			long long money = it->first;
 			out<<++i<<": {";
 			string separator = "";
 			for (auto in=l.begin(); in!=l.end(); ++in) {
@@ -128,9 +128,9 @@ void ProcData::calCycle() {
 			last = l;
 		}
 	}
-	int sum = 0;
+	long long sum = 0;
 	for (auto it=result.rbegin(); it!=result.rend(); ++it) {
-		list<int> l = it->second;
+		list<long long> l = it->second;
 		if (last == l)
 			continue;
 		if (i<100) {
@@ -143,10 +143,10 @@ void ProcData::calCycle() {
 	out.close();
 }
 
-vector<int> ProcData::split(const string &s, char delim) {
+vector<long long> ProcData::split(const string &s, char delim) {
 	stringstream ss(s);
 	string item;
-	vector<int> tokens;
+	vector<long long> tokens;
 	while (getline(ss, item, delim)) {
 		tokens.push_back(atoi(item.c_str()));
 	}

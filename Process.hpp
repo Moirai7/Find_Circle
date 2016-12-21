@@ -29,20 +29,20 @@
 using namespace std;
 
 typedef struct FriendNode{
-	int uid;
+	long long uid;
 	struct FriendNode *next;
 }Friend;
 
-static int user[USERNUM] = {0};
+static long long user[USERNUM] = {0};
 static Friend fri[USERNUM];
 
 class ProcData{
 private:
-	vector<int> split(const string &s, char delim);
+	vector<long long> split(const string &s, char delim);
 
 public:
 	ProcData() {
-		for (int i=0; i<USERNUM; ++i) {
+		for (long long i=0; i<USERNUM; ++i) {
 			fri[i].uid = i;
 			fri[i].next = NULL;
 		}
